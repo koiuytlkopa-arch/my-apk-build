@@ -18,7 +18,7 @@ jobs:
       - name: Build
         working-directory: android
         run: |
-          gradle assembleDebug --no-daemon
+          chmod +x gradlew && ./gradlew assembleDebug --no-daemon
       - name: Publish APK
         env:
           GH_TOKEN: ${{ github.token }}

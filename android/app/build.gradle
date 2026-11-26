@@ -12,14 +12,21 @@ android {
 chaquopy {
     defaultConfig {
         version = "3.12"
-        pip { install "fastapi"; install "uvicorn"; install "python-multipart"; install "httpx"
-              install "reportlab"; install "arabic-reshaper"; install "python-bidi"
+        // تثبيت إصدارات تملك عجلات (wheels) لأندرويد: pydantic v1 وpython-bidi 0.4.2 بايثون صرف،
+        // بينما pydantic v2 وpython-bidi>=0.5 يعتمدان على Rust ولا عجلات لهما على Chaquopy.
+        pip { install "fastapi==0.99.1"; install "pydantic==1.10.13"; install "uvicorn==0.30.6"
+              install "python-multipart==0.0.9"; install "httpx==0.27.2"
+              install "reportlab==4.2.2"; install "arabic-reshaper==3.0.0"; install "python-bidi==0.4.2"
               install "numpy==1.26.2"; install "pillow==10.2.0" }
         extractPackages "app"
     }
 }
 tasks.register('copyPy', Copy) {
-    from("../../app") { into "app" }
-    into "$buildDir/pysrc"
+    from("../../app") { into "app"; exclude "**/__pycache__/**" }
+    into layout.buildDirectory.dir("pysrc")
 }
 preBuild.dependsOn 'copyPy'
+// Gradle 8 يرفض مهمة تقرأ ناتج copyPy بلا اعتماد صريح عليه
+tasks.configureEach { t ->
+    if (t.name != 'copyPy' && t.name.toLowerCase().contains('python')) t.dependsOn 'copyPy'
+}

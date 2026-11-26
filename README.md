@@ -15,3 +15,8 @@
 ## الاختبارات والمعايرة
     python -m pytest -q tests
     python tools/calibrate.py --real صور_حقيقية/ --ai صور_مولّدة/
+
+## بناء تطبيق أندرويد
+    cd android && ./gradlew assembleDebug
+المتطلبات: JDK 17+، وAndroid SDK (ضع مساره في `android/local.properties` بالسطر `sdk.dir=...`)،
+وبايثون **3.12** على الجهاز البنّاء ضمن PATH (يستعمله Chaquopy لتثبيت الحزم).
