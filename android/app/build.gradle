@@ -1,0 +1,25 @@
+plugins { id 'com.android.application'; id 'com.chaquo.python' }
+android {
+    namespace 'app.majhar'
+    compileSdk 34
+    defaultConfig {
+        applicationId 'app.majhar'
+        minSdk 29; targetSdk 34; versionCode 1; versionName '1.0'
+        ndk { abiFilters 'arm64-v8a', 'x86_64' }
+    }
+    sourceSets { main { python.srcDirs = ["$buildDir/pysrc", "src/main/python"] } }
+}
+chaquopy {
+    defaultConfig {
+        version = "3.12"
+        pip { install "fastapi"; install "uvicorn"; install "python-multipart"; install "httpx"
+              install "reportlab"; install "arabic-reshaper"; install "python-bidi"
+              install "numpy==1.26.2"; install "pillow==10.2.0" }
+        extractPackages "app"
+    }
+}
+tasks.register('copyPy', Copy) {
+    from("../../app") { into "app" }
+    into "$buildDir/pysrc"
+}
+preBuild.dependsOn 'copyPy'

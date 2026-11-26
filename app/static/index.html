@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>مجهر الصور</title>
+<style>
+:root{
+  --bg:#eceee8; --panel:#f9f9f4; --ink:#16242a; --mute:#5d6b70; --line:#cbd3cb; --accent:#17655f; --accent-ink:#fff;
+  --c-ai:#b4352a; --c-lean-ai:#c4691f; --c-unsure:#6c7780; --c-lean-real:#5f8c3f; --c-real:#2f7d52;
+  --font:"IBM Plex Sans Arabic","Noto Sans Arabic","Segoe UI",Tahoma,system-ui,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#0d1418;--panel:#152026;--ink:#e3eae7;--mute:#92a1a4;--line:#27383f;--accent:#6cc3b8;--accent-ink:#06201d;
+    --c-ai:#e5675b;--c-lean-ai:#e49a55;--c-unsure:#8e9ba3;--c-lean-real:#9cc77a;--c-real:#62c08c}
+}
+:root[data-theme="dark"]{--bg:#0d1418;--panel:#152026;--ink:#e3eae7;--mute:#92a1a4;--line:#27383f;--accent:#6cc3b8;--accent-ink:#06201d;
+  --c-ai:#e5675b;--c-lean-ai:#e49a55;--c-unsure:#8e9ba3;--c-lean-real:#9cc77a;--c-real:#62c08c}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 var(--font);padding:env(safe-area-inset-top) env(safe-area-inset-left) env(safe-area-inset-bottom) env(safe-area-inset-right)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:920px;margin:0 auto;padding:20px 16px 64px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0 18px}
+h1{font-size:clamp(1.8rem,5vw,2.6rem);margin:0;font-weight:800;letter-spacing:0}
+header p{margin:2px 0 0;color:var(--mute);max-width:46ch}
+button,.btn{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:8px 14px;min-height:44px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+button:disabled{opacity:.55;cursor:wait}
+.drop{display:block;border:2px dashed var(--line);border-radius:14px;padding:28px 18px;text-align:center;background:var(--panel);cursor:pointer}
+.drop.over{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--panel))}
+.drop strong{display:block;font-size:1.15rem}
+.drop span{color:var(--mute)}
+.opts{display:grid;gap:10px;margin:14px 0}
+.opts label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.opts input{margin-top:6px;width:20px;height:20px;flex:none;accent-color:var(--accent)}
+.opts small{display:block;color:var(--mute);line-height:1.6}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-top:22px;overflow:hidden}
+.card>section{padding:16px 18px;border-top:1px solid var(--line)}
+.card>section:first-child{border-top:0}
+.hash{font-family:var(--mono);font-size:.78rem;color:var(--mute);direction:ltr;text-align:right;word-break:break-all}
+.fname{font-weight:700;font-size:1.1rem;word-break:break-word}
+h2{font-size:1.05rem;margin:0 0 10px}
+/* المقياس: العنصر المميّز في الصفحة */
+.scale{position:relative;margin:14px 0 6px;padding-top:16px}
+.scale .bar{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;height:14px}
+.scale .bar i{border-radius:3px;opacity:.38}
+.scale .bar i.on{opacity:1}
+.scale .needle{position:absolute;top:0;width:0;height:0;border-inline:8px solid transparent;border-top:12px solid var(--ink);transform:translateX(50%)}
+.scale .ends{display:flex;justify-content:space-between;color:var(--mute);font-size:.8rem;margin-top:4px}
+.verdict{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.verdict b{font-size:1.7rem;font-weight:800}
+.verdict span{color:var(--mute)}
+.stages{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.stages li{font-size:.82rem;border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--mute)}
+.stages li.done{color:var(--ink)} .stages li.skipped{text-decoration:line-through;opacity:.7}
+.ev{margin:0 0 8px;padding:8px 12px;border-inline-start:4px solid var(--line);background:color-mix(in srgb,var(--ink) 3%,transparent);border-radius:0 8px 8px 0}
+.ev.ai{border-color:var(--c-ai)} .ev.real{border-color:var(--c-real)}
+.ev b{display:block} .ev small{color:var(--mute);display:block}
+.tag{font-size:.75rem;color:var(--mute)}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;margin:0}
+.kv dt{color:var(--mute)} .kv dd{margin:0;word-break:break-word}
+.ela{max-width:100%;border-radius:8px;border:1px solid var(--line);image-rendering:auto}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:4px 0}
+.chk input{margin-top:7px;width:20px;height:20px;accent-color:var(--accent)}
+textarea{width:100%;min-height:90px;font:inherit;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px}
+.limits li{color:var(--mute);margin-bottom:4px}
+.err{color:var(--c-ai);font-weight:700}
+.cached{font-size:.8rem;border:1px solid var(--accent);color:var(--accent);border-radius:999px;padding:0 8px}
+.cases{margin-top:34px}.cases li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding:6px 0}
+ul{padding-inline-start:20px}
+@media (max-width:560px){.kv{grid-template-columns:1fr}.kv dt{margin-top:6px}}
+@media (prefers-reduced-motion:no-preference){.needle{transition:inset-inline-start .6s cubic-bezier(.2,.8,.2,1)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>مجهر الصور</h1>
+    <p>افحص صورة أو دفعة صور، واعرف هل هي مولّدة بالذكاء الاصطناعي ومن أين جاءت، في تقرير موثّق بالأدلة.</p>
+  </div>
+  <button id="theme" aria-label="تبديل الوضع الداكن">◐</button>
+</header>
+
+<label class="drop" id="drop" for="file">
+  <strong>اسحب الصور هنا أو اضغط للاختيار</strong>
+  <span>حتى 40 صورة في الدفعة، كل صورة حتى 30 ميغابايت</span>
+  <input id="file" type="file" accept="image/*" multiple hidden>
+</label>
+<div id="picked" class="tag" style="margin:8px 0" aria-live="polite"></div>
+
+<div class="opts">
+  <label><input type="checkbox" id="ext">
+    <span>السماح بالاتصالات الخارجية الخفيفة<small>يرسل الإحداثيات فقط إلى OpenStreetMap لتحويلها إلى عنوان، والروابط المطابقة فقط إلى أرشيف الإنترنت. لا تُرسل الصورة.</small></span></label>
+  <label><input type="checkbox" id="up">
+    <span>السماح برفع الصورة للبحث العكسي<small>يرفع الصورة نفسها إلى Google Vision أو TinEye إن وُجد مفتاح على الخادم. اتركه مغلقاً للحفاظ على الخصوصية.</small></span></label>
+</div>
+<div class="row"><button class="primary" id="go" disabled>افحص الصور</button><span id="status" class="tag" aria-live="polite"></span></div>
+
+<div id="results"></div>
+
+<div class="cases"><h2>آخر القضايا المفحوصة</h2><ul id="cases" style="list-style:none;padding:0"></ul></div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const BANDS=[["مولّدة غالباً","--c-ai"],["تميل للتوليد","--c-lean-ai"],["غير حاسم","--c-unsure"],["تميل لكونها حقيقية","--c-lean-real"],["حقيقية غالباً","--c-real"]];
+const CHECK=["الظلال: اتجاهها وطولها متسقان مع موضع الشمس المحسوب وبين الأجسام المختلفة","النصوص واللافتات: حروف مقروءة وصحيحة الإملاء وغير مشوّهة","الأيدي والأصابع والأسنان والأذنان: عدد وتشريح طبيعيان","الانعكاسات (زجاج/ماء/عيون/مرايا): تطابق المشهد المنعكس مع المصدر","مطابقة الموقع: المعالم والمباني واللوحات تطابق المكان المزعوم (خرائط/Street View)","الطقس والتاريخ: الغطاء النباتي والإضاءة والطقس يطابقون التاريخ المزعوم","الاتساق: المنظور والمقياس والإضاءة موحّدة عبر الصورة، وحواف الأجسام نظيفة"];
+const STAGE_TITLES={metadata:"البيانات الوصفية والمنشأ",forensics:"التحليل الجنائي الخفيف",model:"نموذج الكشف",osint:"الاستقصاء"};
+const DIRS={ai:"تدعم التوليد",real:"تدعم الأصالة",neutral:"محايدة"};
+let files=[],RES=[];
+
+// الوضع الداكن
+const root=document.documentElement;
+$("#theme").onclick=()=>{const d=getComputedStyle(root).getPropertyValue("--bg").trim()==="#0d1418";root.dataset.theme=d?"light":"dark";try{localStorage.setItem("th",root.dataset.theme)}catch(e){}};
+try{const t=localStorage.getItem("th");if(t)root.dataset.theme=t}catch(e){}
+
+// اختيار الملفات
+const drop=$("#drop"),inp=$("#file");
+function setFiles(l){files=[...l].filter(f=>f.type.startsWith("image/")).slice(0,40);$("#picked").textContent=files.length?`تم اختيار ${files.length} صورة`:"";$("#go").disabled=!files.length}
+inp.onchange=()=>setFiles(inp.files);
+["dragover","dragenter"].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add("over")}));
+["dragleave","drop"].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove("over")}));
+drop.addEventListener("drop",ev=>setFiles(ev.dataTransfer.files));
+$("#up").onchange=e=>{if(e.target.checked)$("#ext").checked=true};
+
+$("#go").onclick=async()=>{
+  const fd=new FormData();files.forEach(f=>fd.append("files",f));
+  fd.append("allow_external",$("#ext").checked);fd.append("allow_upload",$("#up").checked);
+  $("#go").disabled=true;$("#status").textContent="جارٍ الفحص…";
+  try{
+    const r=await fetch("/api/analyze",{method:"POST",body:fd});
+    if(!r.ok)throw new Error((await r.json()).detail||r.status);
+    RES=(await r.json()).results;render();$("#status").textContent="اكتمل الفحص.";loadCases();
+  }catch(e){$("#status").textContent="تعذّر الفحص: "+e.message}
+  $("#go").disabled=!files.length;
+};
+
+function scaleHTML(v){
+  const i=BANDS.findIndex(b=>b[0]===v.label);
+  const bar=BANDS.map((b,k)=>`<i class="${k===i?"on":""}" style="background:var(${b[1]})"></i>`).join("");
+  return `<div class="scale" role="img" aria-label="${esc(v.label)}، درجة ${v.score} من 100"><span class="needle" style="inset-inline-start:${100-v.score}%"></span><div class="bar">${bar}</div><div class="ends"><span>مولّدة غالباً</span><span>حقيقية غالباً</span></div></div>`;
+}
+function evHTML(stage,r){
+  const items=r.evidence.filter(e=>e.stage===stage);
+  if(!items.length)return `<p class="tag">لا أدلة في هذه المرحلة.</p>`;
+  return ["ai","real","neutral"].flatMap(d=>items.filter(e=>e.direction===d).map(e=>`<div class="ev ${d}"><b>${esc(e.label)}</b><small>${DIRS[d]}${e.decisive?" — حاسم":e.weight?` — قوة ${e.weight}`:""}</small>${esc(e.detail)}</div>`)).join("");
+}
+function osintHTML(o){
+  const rows=[];const g=o.gps||{};
+  rows.push(["GPS",g.status==="ok"?`<a href="${esc(g.map_osm)}" target="_blank" rel="noopener">${g.lat}, ${g.lon}</a>`:esc(g.detail||"—")]);
+  const t=o.time||{};rows.push(["الزمن (UTC)",esc((t.utc||"—")+(t.detail?" — "+t.detail:""))]);
+  if(o.sun)rows.push(["موضع الشمس",`ارتفاع ${o.sun.elevation}° · سمت ${o.sun.azimuth}° (${o.sun.sun_direction_ar}) · الظلال نحو ${o.sun.shadow_direction_ar}`+(o.sun.shadow_to_height?` · الطول ≈ ${o.sun.shadow_to_height}× الارتفاع`:"")]);
+  rows.push(["العنوان",esc((o.address||{}).address||(o.address||{}).detail||"—")]);
+  const rs=o.reverse_search||{};rows.push(["البحث العكسي",esc(rs.status==="ok"?"نُفّذ — راجع المطابقات في التقرير":(rs.detail||"—"))]);
+  const e=o.earliest||{};rows.push(["أقدم ظهور",esc(e.first?e.first.slice(0,10):(e.detail||"—"))]);
+  const links=Object.entries(o.manual_links||{}).map(([k,v])=>`<a href="${esc(v)}" target="_blank" rel="noopener">${esc(k)}</a>`).join(" · ");
+  return `<dl class="kv">${rows.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl><p class="tag" style="margin-top:10px">بحث يدوي: ${links}</p>`;
+}
+function cardHTML(r,idx){
+  if(r.error)return `<article class="card"><section><div class="fname">${esc(r.filename)}</div><p class="err">${esc(r.error)}</p></section></article>`;
+  const v=r.verdict;
+  const stages=r.stages.map(s=>`<li class="${s.status}" title="${esc(s.note)}">${esc(s.name)} · ${s.status==="skipped"?"متخطّاة":s.ms+" م.ث"}</li>`).join("");
+  return `<article class="card" data-i="${idx}">
+  <section>
+    <div class="fname">${esc(r.filename)} ${r.cached?'<span class="cached">من الذاكرة المؤقتة</span>':""}</div>
+    <div class="hash">${r.sha256}</div>
+    <div class="verdict" style="margin-top:12px"><b style="color:var(${BANDS.find(b=>b[0]===v.label)[1]})">${v.label}</b><span>درجة الميل نحو التوليد ${v.score.toFixed(0)}/100 · تقديرية غير مُعايَرة</span></div>
+    ${scaleHTML(v)}
+    ${v.notes.map(n=>`<p class="tag">${esc(n)}</p>`).join("")}
+  </section>
+  <section><h2>مراحل الفحص (${r.total_ms} م.ث)</h2><ul class="stages">${stages}</ul></section>
+  ${["metadata","forensics","model"].map(s=>`<section><h2>${STAGE_TITLES[s]}</h2>${evHTML(s,r)}</section>`).join("")}
+  ${r.ela_png?`<section><h2>خريطة ELA</h2><img class="ela" alt="خريطة ELA للفحص البصري" src="data:image/png;base64,${r.ela_png}"></section>`:""}
+  <section><h2>${STAGE_TITLES.osint}</h2>${osintHTML(r.osint)}${evHTML("osint",r)}</section>
+  <section><h2>قائمة تحقق يدوية</h2>${CHECK.map((c,i)=>`<label class="chk"><input type="checkbox" data-c="${i}"><span>${esc(c)}</span></label>`).join("")}
+    <h2 style="margin-top:14px">ملاحظات المحلل</h2><textarea class="notes" placeholder="اكتب ملاحظاتك هنا لتدخل في التقرير"></textarea></section>
+  <section><h2>حدود التقرير</h2><ul class="limits">${r.limits.map(l=>`<li>${esc(l)}</li>`).join("")}</ul>
+    <div class="row"><button data-a="copy">نسخ Markdown</button><button data-a="md">تنزيل Markdown</button><button class="primary" data-a="pdf">تنزيل PDF</button></div></section>
+  </article>`;
+}
+function render(){$("#results").innerHTML=RES.map(cardHTML).join("")}
+$("#results").addEventListener("click",async e=>{
+  const b=e.target.closest("button[data-a]");if(!b)return;
+  const card=b.closest(".card"),r=RES[card.dataset.i],a=b.dataset.a;
+  const checked=[...card.querySelectorAll("input[data-c]:checked")].map(x=>CHECK[x.dataset.c]);
+  const notes=card.querySelector(".notes").value;
+  b.disabled=true;
+  try{
+    const res=await fetch(`/api/report/${a==="pdf"?"pdf":"md"}?key=${encodeURIComponent(r.key)}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({notes,checked})});
+    if(!res.ok)throw new Error(res.status);
+    if(a==="copy"){await navigator.clipboard.writeText(await res.text());b.textContent="تم النسخ";setTimeout(()=>b.textContent="نسخ Markdown",1500)}
+    else if(window.Android){const bl=await res.blob();const rd=new FileReader();rd.onload=()=>{Android.save(`majhar-${r.sha256.slice(0,12)}.${a}`,bl.type,rd.result.split(",")[1])};rd.readAsDataURL(bl)}
+    else{const u=URL.createObjectURL(await res.blob());const l=document.createElement("a");l.href=u;l.download=`majhar-${r.sha256.slice(0,12)}.${a}`;l.click();URL.revokeObjectURL(u)}
+  }catch(err){alert("تعذّر إنشاء التقرير: "+err.message)}
+  b.disabled=false;
+});
+async function loadCases(){
+  try{const j=await (await fetch("/api/cases")).json();
+    $("#cases").innerHTML=j.cases.length?j.cases.map(c=>`<li><span>${esc(c.filename)}</span><span class="tag">${esc(c.label)} · ${Math.round(c.score)}</span></li>`).join(""):'<li class="tag">لا قضايا بعد. ابدأ بفحص صورة.</li>';
+  }catch(e){}
+}
+loadCases();
+</script>
+</body>
+</html>
