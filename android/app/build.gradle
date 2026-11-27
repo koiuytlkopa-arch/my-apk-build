@@ -11,10 +11,10 @@ android {
 }
 chaquopy {
     defaultConfig {
-        version = "3.11"
+        version = "3.12"
         pip { install "fastapi"; install "uvicorn"; install "python-multipart"; install "httpx"
               install "reportlab"; install "arabic-reshaper"; install "python-bidi==0.4.2"
-              install "numpy==1.26.2"; install "pillow==10.2.0" }
+              install "numpy==1.26.2"; install "pillow==9.5.0" }
         extractPackages "app"
     }
 }
