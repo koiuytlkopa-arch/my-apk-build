@@ -1,0 +1,123 @@
+RUN 46001765076
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.9/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+Warning: Python version 3.12 may have fewer packages available. If you experience problems, try switching to version 3.8.
+
+> Task :app:copyPy
+> Task :app:preBuild
+> Task :app:preDebugBuild
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:extractDebugPythonBuildPackages
+
+> Task :app:generateDebugPythonRequirements
+Chaquopy: Installing for arm64-v8a
+Looking in indexes: https://pypi.org/simple, https://chaquo.com/pypi-13.1
+Collecting fastapi==0.103.2
+  Downloading fastapi-0.103.2-py3-none-any.whl (66 kB)
+Collecting starlette==0.27.0
+  Downloading starlette-0.27.0-py3-none-any.whl (66 kB)
+Collecting pydantic==1.10.18
+  Downloading pydantic-1.10.18-py3-none-any.whl (165 kB)
+Collecting uvicorn
+  Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
+Collecting python-multipart
+  Downloading python_multipart-0.0.34-py3-none-any.whl (32 kB)
+Collecting httpx
+  Downloading httpx-0.29.0-py3-none-any.whl (73 kB)
+Collecting reportlab
+  Downloading reportlab-5.1.2-py3-none-any.whl (2.0 MB)
+Collecting arabic-reshaper
+  Downloading arabic_reshaper-3.1.0-py3-none-any.whl (20 kB)
+Collecting python-bidi==0.4.2
+  Downloading python_bidi-0.4.2-py2.py3-none-any.whl (30 kB)
+Collecting numpy==1.26.2
+  Downloading https://chaquo.com/pypi-13.1/numpy/numpy-1.26.2-0-cp312-cp312-android_21_arm64_v8a.whl (5.0 MB)
+Collecting pillow
+  Downloading https://chaquo.com/pypi-13.1/pillow/pillow-11.0.0-0-cp312-cp312-android_24_arm64_v8a.whl (582 kB)
+Collecting anyio<4.0.0,>=3.7.1
+  Downloading anyio-3.7.1-py3-none-any.whl (80 kB)
+Collecting typing-extensions>=4.5.0
+  Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Collecting h11>=0.8
+  Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Collecting click>=7.0
+  Downloading click-8.5.1-py3-none-any.whl (126 kB)
+Collecting certifi
+  Downloading certifi-2026.11.20-py3-none-any.whl (127 kB)
+Collecting httpcore==1.*
+  Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+Collecting idna
+  Downloading idna-3.20-py3-none-any.whl (69 kB)
+Collecting charset-normalizer
+  Downloading charset_normalizer-3.5.3-py3-none-any.whl (68 kB)
+Collecting six
+  Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+Collecting chaquopy-libcxx>=11000
+  Downloading https://chaquo.com/pypi-13.1/chaquopy-libcxx/chaquopy_libcxx-180000-0-py3-none-android_24_arm64_v8a.whl (413 kB)
+Collecting chaquopy-openblas>=0.2.20
+  Downloading https://chaquo.com/pypi-13.1/chaquopy-openblas/chaquopy_openblas-0.2.20-5-py3-none-android_21_arm64_v8a.whl (4.3 MB)
+Collecting chaquopy-libjpeg>=1.5.3
+  Downloading https://chaquo.com/pypi-13.1/chaquopy-libjpeg/chaquopy_libjpeg-1.5.3-1-py3-none-android_21_arm64_v8a.whl (176 kB)
+Collecting chaquopy-freetype>=2.9.1
+  Downloading https://chaquo.com/pypi-13.1/chaquopy-freetype/chaquopy_freetype-2.9.1-2-py3-none-android_21_arm64_v8a.whl (533 kB)
+Collecting sniffio>=1.1
+  Downloading sniffio-1.3.1-py3-none-any.whl (10 kB)
+Collecting chaquopy-libgfortran>=4.9
+  Downloading https://chaquo.com/pypi-13.1/chaquopy-libgfortran/chaquopy_libgfortran-4.9-0-py3-none-android_21_arm64_v8a.whl (495 kB)
+Installing collected packages: sniffio, idna, anyio, typing-extensions, pydantic, starlette, fastapi, h11, click, uvicorn, python-multipart, certifi, httpcore, httpx, charset-normalizer, chaquopy-libjpeg, chaquopy-freetype, pillow, reportlab, arabic-reshaper, six, python-bidi, chaquopy-libcxx, chaquopy-libgfortran, chaquopy-openblas, numpy
+ERROR: reportlab 5.1.2 has requirement pillow>=13.0.0, but you'll have pillow 11.0.0 which is incompatible.
+Successfully installed anyio-3.7.1 arabic-reshaper-3.1.0 certifi-2026.11.20 chaquopy-freetype-2.9.1 chaquopy-libcxx-180000 chaquopy-libgfortran-4.9 chaquopy-libjpeg-1.5.3 chaquopy-openblas-0.2.20 charset-normalizer-3.5.3 click-8.5.1 fastapi-0.103.2 h11-0.16.0 httpcore-1.0.9 httpx-0.29.0 idna-3.20 numpy-1.26.2 pillow-11.0.0 pydantic-1.10.18 python-bidi-0.4.2 python-multipart-0.0.34 reportlab-5.1.2 six-1.17.0 sniffio-1.3.1 starlette-0.27.0 typing-extensions-4.16.0 uvicorn-0.54.0
+Chaquopy: Installing for x86_64
+Looking in indexes: https://pypi.org/simple, https://chaquo.com/pypi-13.1
+Collecting chaquopy-freetype==2.9.1
+  Downloading https://chaquo.com/pypi-13.1/chaquopy-freetype/chaquopy_freetype-2.9.1-2-py3-none-android_21_x86_64.whl (567 kB)
+Collecting chaquopy-libcxx==180000
+  Downloading https://chaquo.com/pypi-13.1/chaquopy-libcxx/chaquopy_libcxx-180000-0-py3-none-android_24_x86_64.whl (422 kB)
+Collecting chaquopy-libgfortran==4.9
+  Downloading https://chaquo.com/pypi-13.1/chaquopy-libgfortran/chaquopy_libgfortran-4.9-0-py3-none-android_21_x86_64.whl (541 kB)
+Collecting chaquopy-libjpeg==1.5.3
+  Downloading https://chaquo.com/pypi-13.1/chaquopy-libjpeg/chaquopy_libjpeg-1.5.3-1-py3-none-android_21_x86_64.whl (147 kB)
+Collecting chaquopy-openblas==0.2.20
+  Downloading https://chaquo.com/pypi-13.1/chaquopy-openblas/chaquopy_openblas-0.2.20-5-py3-none-android_21_x86_64.whl (5.3 MB)
+Collecting numpy==1.26.2
+  Downloading https://chaquo.com/pypi-13.1/numpy/numpy-1.26.2-0-cp312-cp312-android_21_x86_64.whl (6.5 MB)
+Collecting pillow==11.0.0
+  Downloading https://chaquo.com/pypi-13.1/pillow/pillow-11.0.0-0-cp312-cp312-android_24_x86_64.whl (603 kB)
+Installing collected packages: chaquopy-freetype, chaquopy-libcxx, chaquopy-libgfortran, chaquopy-libjpeg, chaquopy-openblas, numpy, pillow
+Successfully installed chaquopy-freetype-2.9.1 chaquopy-libcxx-180000 chaquopy-libgfortran-4.9 chaquopy-libjpeg-1.5.3 chaquopy-openblas-0.2.20 numpy-1.26.2 pillow-11.0.0
+Warning: Failed to compile to .pyc format: buildPython version 3.14.4 is incompatible. See https://chaquo.com/chaquopy/doc/current/android.html#android-bytecode.
+
+> Task :app:mergeDebugPythonSources FAILED
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_2-1795783744918.json
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+A problem was found with the configuration of task ':app:mergeDebugPythonSources' (type 'OutputDirTask').
+  - Gradle detected a problem with the following location: '/home/runner/work/my-apk-build/my-apk-build/android/app/build/pysrc'.
+    
+    Reason: Task ':app:mergeDebugPythonSources' uses this output of task ':app:copyPy' without declaring an explicit or implicit dependency. This can lead to incorrect results being produced, depending on what order the tasks are executed.
+    
+    Possible solutions:
+      1. Declare task ':app:copyPy' as an input of ':app:mergeDebugPythonSources'.
+      2. Declare an explicit dependency on ':app:copyPy' from ':app:mergeDebugPythonSources' using Task#dependsOn.
+      3. Declare an explicit dependency on ':app:copyPy' from ':app:mergeDebugPythonSources' using Task#mustRunAfter.
+    
+    For more information, please refer to https://docs.gradle.org/8.9/userguide/validation_problems.html#implicit_dependency in the Gradle documentation.
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.9/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 25s
+4 actionable tasks: 4 executed
