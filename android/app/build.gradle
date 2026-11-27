@@ -24,3 +24,6 @@ tasks.register('copyPy', Copy) {
     into "$buildDir/pysrc"
 }
 preBuild.dependsOn 'copyPy'
+tasks.configureEach {
+    if (name == 'mergeDebugPythonSources') dependsOn 'copyPy'
+}
