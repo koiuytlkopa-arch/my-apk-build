@@ -1,6 +1,7 @@
 name: Build APK
 on:
   push:
+    branches-ignore: [build-logs]
   workflow_dispatch:
 permissions:
   contents: write
@@ -12,18 +13,31 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 17 }
       - name: Accept SDK licenses
-        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+        run: |
+          yes | "$(ls -d $ANDROID_HOME/cmdline-tools/*/bin/sdkmanager | head -1)" --licenses > /dev/null || true
       - uses: gradle/actions/setup-gradle@v4
         with: { gradle-version: "8.9" }
       - name: Build
         working-directory: android
         run: |
-          chmod +x gradlew && ./gradlew assembleDebug --no-daemon
+          exec > >(tee -a "$GITHUB_WORKSPACE/build.log") 2>&1
+          trap 'sleep 2' EXIT
+          gradle assembleDebug --no-daemon
       - name: Publish APK
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          APK=$(find . -path '*outputs*' -name '*.apk' | head -1)
+          exec > >(tee -a "$GITHUB_WORKSPACE/build.log") 2>&1
+          trap 'sleep 2' EXIT
+          APK=$(find . -path '*outputs*' -name '*.apk' | sort | grep -E 'universal|arm64' | head -1)
+          [ -n "$APK" ] || APK=$(find . -path '*outputs*' -name '*.apk' | sort | head -1)
           [ -n "$APK" ] || { echo 'no apk found'; exit 1; }
+          case "$APK" in *unsigned*) BT=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -1); keytool -genkeypair -keystore /tmp/k.jks -storepass android -keypass android -alias k -keyalg RSA -keysize 2048 -validity 10000 -dname CN=a > /dev/null 2>&1; "$BT/apksigner" sign --ks /tmp/k.jks --ks-pass pass:android --out signed.apk "$APK" && APK=signed.apk;; esac
           cp "$APK" app.apk
           gh release create "v${{ github.run_number }}" app.apk --title "Build ${{ github.run_number }}" --notes APK --latest
+      - name: Save log
+        if: failure()
+        run: |
+          mkdir -p /tmp/lg
+          { echo "RUN ${{ github.run_id }}"; sed 's/\x1b\[[0-9;]*[a-zA-Z]//g' build.log 2>/dev/null | tail -n 400; } > /tmp/lg/build-log.txt
+          cd /tmp/lg && git init -q && git checkout -q -b build-logs && git add . && git -c user.name=bot -c user.email=bot@users.noreply.github.com commit -qm log && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" build-logs

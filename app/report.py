@@ -119,10 +119,7 @@ def _first(paths):
 
 def to_pdf(blocks):
     import arabic_reshaper
-    try:
-        from bidi import get_display          # python-bidi >= 0.5
-    except ImportError:
-        from bidi.algorithm import get_display  # python-bidi 0.4.x
+    from bidi.algorithm import get_display
     from reportlab.lib.pagesizes import A4
     from reportlab.pdfbase import pdfmetrics
     from reportlab.pdfbase.ttfonts import TTFont
