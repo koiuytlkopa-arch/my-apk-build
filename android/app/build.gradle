@@ -12,7 +12,8 @@ android {
 chaquopy {
     defaultConfig {
         version = "3.12"
-        pip { install "fastapi"; install "uvicorn"; install "python-multipart"; install "httpx"
+        pip { install "fastapi==0.103.2"; install "starlette==0.27.0"; install "pydantic==1.10.18"
+              install "uvicorn"; install "python-multipart"; install "httpx"
               install "reportlab"; install "arabic-reshaper"; install "python-bidi==0.4.2"
               install "numpy==1.26.2"; install "pillow" }
         extractPackages "app"
